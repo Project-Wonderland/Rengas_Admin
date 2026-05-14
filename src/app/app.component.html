@@ -1,34 +1,6 @@
-<div *ngIf="!loggedIn()" class="login-page admin-login">
-  <div class="login-shell">
-    <section class="brand-panel"><img [src]="logo" class="brand-logo"><h1>WELCOME TO RENGAS</h1><p>TRADING & MANUFACTURING ADMIN SYSTEM</p></section>
-    <section class="login-card"><p class="login-help">SELECT LOGIN TYPE AND ENTER CREDENTIALS</p>
-      <div class="login-role-grid"><button [class.active]="role==='Admin'" (click)="role='Admin'">ADMIN</button><button [class.active]="role==='Order Management Admin'" (click)="role='Order Management Admin'">ORDER MANAGEMENT ADMIN</button></div>
-      <div class="credential-box"><label>Username</label><input [(ngModel)]="username" placeholder="Enter username"><label>Password</label><input [(ngModel)]="password" type="password" placeholder="Enter password"><div *ngIf="error" class="login-error">{{error}}</div><button class="login-submit" (click)="login()">Login</button><small>Admin: admin / admin123 &nbsp; | &nbsp; Order: order / order123</small></div>
-    </section>
-  </div>
-</div>
-
-<div *ngIf="loggedIn()" class="app">
-  <aside class="sidebar"><div class="logo-row"><img [src]="logo"><div><b>RENGAS ADMIN</b><small>{{loggedIn()}}</small></div></div>
-    <div class="side-search"><input [(ngModel)]="search" placeholder="Search products..."></div>
-    <div class="cat-title">Categories <span>{{products().length}}</span></div>
-    <div class="category-list"><button *ngFor="let c of categoryCounts()" [class.active]="selectedCategory===c.name" (click)="selectCategory(c.name)"><span>{{c.name}}</span><small>{{c.count}}</small></button></div>
-  </aside>
-  <main>
-    <div class="topbar"><div><h2>{{activeTab | titlecase}}</h2><p>Editable Angular source converted from uploaded admin build.</p></div><div class="top-actions"><button (click)="activeTab='products'">Products</button><button (click)="activeTab='customers'">Customers</button><button (click)="activeTab='orders'">Orders</button><button (click)="logout()">Logout</button></div></div>
-    <div *ngIf="toast" class="toast">{{toast}}</div>
-
-    <section *ngIf="activeTab==='products'" class="panel"><div class="panel-head"><div><h3>Product Management</h3><p>{{filteredProducts().length}} products found</p></div><button class="primary-small" (click)="openAddProduct()">+ Add Product</button></div>
-      <div class="filters"><div class="search-input"><input [(ngModel)]="search" placeholder="Search by name, code or category"></div><select [(ngModel)]="selectedCategory"><option *ngFor="let c of categories" [value]="c">{{c}}</option></select></div>
-      <div class="product-list-header"><span>No</span><span>Code</span><span>Image</span><span>Name</span><span>Category</span><span>Price</span><span>Actions</span></div>
-      <div class="product-list"><div class="product-row" *ngFor="let p of pagedProducts(); let i=index"><span class="sno">{{(page-1)*perPage+i+1}}</span><span class="sku">{{p.sku}}</span><img class="product-img" [src]="p.image || logo"><div class="product-info"><strong>{{p.name}}</strong><small>{{p.uom}}</small></div><span class="category-pill">{{p.category}}</span><span class="price">{{p.price}}</span><div class="actions"><button (click)="openEditProduct(p)">Edit</button><button class="delete" (click)="deleteProduct(p)">Delete</button></div></div></div>
-      <div class="pagination"><button [disabled]="page===1" (click)="page=page-1">Prev</button><button class="active">{{page}} / {{totalPages()}}</button><button [disabled]="page===totalPages()" (click)="page=page+1">Next</button></div>
-    </section>
-
-    <section *ngIf="activeTab==='customers'" class="panel"><div class="panel-head"><div><h3>Customer Management</h3><p>{{customers().length}} customers found</p></div><button class="primary-small" (click)="openAddCustomer()">+ Add Customer</button></div><div class="customer-table-list"><div class="customer-table-row" *ngFor="let c of customers()"><div class="customer-name"><b>{{c.name}}</b><small>{{c.address}}</small></div><span>{{c.phone}}</span><span>{{c.tin}}</span><span>{{c.orders}} orders</span></div></div></section>
-    <section *ngIf="activeTab==='orders'" class="panel"><div class="panel-head"><div><h3>Order Management</h3><p>{{orders().length}} dummy orders loaded</p></div></div><div class="customer-table-list"><div class="customer-table-row" *ngFor="let o of orders()"><div class="customer-name"><b>{{o.id}} - {{o.customer}}</b><small>{{o.date}} • {{o.items}} items</small></div><span>{{o.phone}}</span><span>{{o.amount}}</span><span>{{o.status}}</span></div></div></section>
-  </main>
-</div>
+<div *ngIf="!loggedIn()" [ngClass]="role === 'Admin' ? 'admin-login' : 'order-login'" class="login-page" app-login-page [logo]="logo" [(role)]="role" (loginSuccess)="handleLoginSuccess($event)"></div>
+<div *ngIf="loggedIn() === 'Admin'" class="app" app-admin-dashboard [logo]="logo" [loggedIn]="loggedIn()" [categories]="categories" [toast]="toast" (logout)="logout()" (openAddProduct)="openAddProduct()" (openEditProduct)="openEditProduct($event)" (deleteProduct)="deleteProduct($event)" (openAddCustomer)="openAddCustomer()"></div>
+<div *ngIf="loggedIn() === 'Order Management Admin'" class="order-app" app-order-management [logo]="logo" [loggedIn]="loggedIn()" (logout)="logout()"></div>
 
 <div *ngIf="modal==='product'" class="modal-backdrop"><div class="modal-card"><div class="modal-head"><div><h3>{{editProduct.id ? 'Edit' : 'Add'}} Product</h3><p>Editable Angular form</p></div><button class="close" (click)="modal=null">×</button></div><div class="modal-body"><div class="image-picker"><img [src]="editProduct.image || logo"><b>Product Image URL</b><input [(ngModel)]="editProduct.image" placeholder="Image URL"></div><div class="form-grid"><label>SKU</label><input [(ngModel)]="editProduct.sku"><label>Name</label><input [(ngModel)]="editProduct.name"><label>Category</label><select [(ngModel)]="editProduct.category"><option *ngFor="let c of categories.slice(1)" [value]="c">{{c}}</option></select><label>UOM</label><select [(ngModel)]="editProduct.uom"><option *ngFor="let u of uoms" [value]="u">{{u}}</option></select><label>Price</label><input [(ngModel)]="editProduct.price"><button class="primary-full" (click)="saveProduct()">Save Product</button></div></div></div></div>
 <div *ngIf="modal==='customer'" class="modal-backdrop"><div class="modal-card"><div class="modal-head"><div><h3>Add Customer</h3><p>Customer details</p></div><button class="close" (click)="modal=null">×</button></div><div class="modal-body"><div></div><div class="form-grid"><label>Name</label><input [(ngModel)]="editCustomer.name"><label>Phone</label><input [(ngModel)]="editCustomer.phone"><label>WhatsApp</label><input [(ngModel)]="editCustomer.whatsapp"><label>TIN</label><input [(ngModel)]="editCustomer.tin"><label>Address</label><input [(ngModel)]="editCustomer.address"><button class="primary-full" (click)="saveCustomer()">Save Customer</button></div></div></div></div>
