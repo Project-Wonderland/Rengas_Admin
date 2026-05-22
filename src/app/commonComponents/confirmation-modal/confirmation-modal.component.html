@@ -1,0 +1,21 @@
+<div class="modal-backdrop" style="z-index: 9999;">
+  <div class="modal-card" style="width: min(400px, 90vw); padding: 24px; max-width: 400px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; border-radius: 20px;">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+      <h3 style="margin: 0; font-size: 20px; font-weight: 650; color: #101828;">{{ title }}</h3>
+      <button class="close" (click)="onCancel()" style="width: 32px; height: 32px; min-width: 32px; border: none; background: transparent; padding: 0;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#667085" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+    </div>
+    
+    <p style="margin: 0; font-size: 14px; color: #667085; line-height: 1.5;">{{ message }}</p>
+    
+    <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 12px;">
+      <button class="secondary" style="height: 40px; padding: 0 16px; border-radius: 10px;" (click)="onCancel()">
+        {{ cancelButtonText }}
+      </button>
+      <button [ngClass]="isDanger ? 'danger' : 'primary-small'" style="height: 40px; padding: 0 16px; border-radius: 10px;" (click)="onConfirm()">
+        {{ confirmButtonText }}
+      </button>
+    </div>
+  </div>
+</div>

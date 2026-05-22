@@ -22,6 +22,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
   @Output() openEditProduct = new EventEmitter<any>();
   @Output() deleteProduct = new EventEmitter<any>();
   @Output() openAddCustomer = new EventEmitter<void>();
+  @Output() openDesignCMS = new EventEmitter<void>();
 
   products: Product[] = [];
   customers: Customer[] = [];

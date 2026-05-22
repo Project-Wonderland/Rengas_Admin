@@ -1,0 +1,110 @@
+<div class="modal-backdrop" style="z-index: 10000;">
+  <div class="modal-card" style="width: min(760px, 94vw); display: flex; flex-direction: column; overflow: hidden; max-height: 90vh;">
+    
+    <!-- Header Section -->
+    <div class="modal-head" style="padding: 24px 28px;">
+      <div>
+        <h3 style="font-size: 24px; font-weight: 700; color: #101828; margin: 0 0 6px 0;">Design CMS</h3>
+        <p style="color: #667085; font-size: 14px; margin: 0;">PDF front page images. End page uses the top banner automatically.</p>
+      </div>
+      <button class="close" (click)="onClose()" style="width: 40px; height: 40px; min-width: 40px; border-radius: 12px; border: 1px solid #EAECF0; background: #fff; display: grid; place-items: center; cursor: pointer;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#667085" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+    </div>
+
+    <!-- Main Body Content -->
+    <div style="background: #F7F8FC; padding: 28px; flex: 1; overflow-y: auto; min-height: 0;">
+      
+      <!-- Section Subheader Row -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h4 style="margin: 0; font-size: 18px; font-weight: 700; color: #101828;">Front Page Design</h4>
+        <button class="secondary" style="height: 38px; padding: 0 16px; border-radius: 12px; color: #D92D20; border: 1px solid #FDA29B; background: transparent; font-weight: 600; font-size: 14px; cursor: pointer;" (click)="removeFrontImages()">
+          Remove Front Images
+        </button>
+      </div>
+
+      <!-- Upload Cards -->
+      <div style="display: grid; gap: 20px;">
+        
+        <!-- Card 1: Top Background / Banner Image -->
+        <div style="background: #fff; border: 1px solid #EAECF0; border-radius: 20px; padding: 24px;">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 18px;">
+            <div>
+              <b style="color: #101828; font-size: 15px; font-weight: 700; display: block; margin-bottom: 6px;">Top Background / Banner Image</b>
+              <span style="color: #667085; font-size: 13px; display: block; margin-bottom: 12px;">Recommended: A4 Top Half (1240 × 700 px)</span>
+              <span style="background: #F2F4F7; color: #344054; font-size: 12px; padding: 6px 12px; border-radius: 99px; font-weight: 600;">
+                {{ topBanner ? 'Image uploaded' : 'No image uploaded' }}
+              </span>
+            </div>
+            <label class="upload-image" style="display:inline-flex; padding:0 18px; width:auto; font-size:14px; height:40px; border-radius:12px; background: #09089C; color: #fff; font-weight: 600; align-items: center; gap: 8px; cursor: pointer;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+              Upload
+              <input type="file" (change)="onUploadTopBanner($event)" accept="image/*" style="display:none;">
+            </label>
+          </div>
+          <div style="width: 100%; height: 140px; border: 1.5px dashed #D0D5DD; border-radius: 16px; display: grid; place-items: center; overflow: hidden; background: #FCFCFD;">
+            <img *ngIf="topBanner" [src]="topBanner" style="width: 100%; height: 100%; object-fit: cover;">
+            <span *ngIf="!topBanner" style="color: #98A2B3; font-size: 14px; font-weight: 500;">No image</span>
+          </div>
+        </div>
+
+        <!-- Card 2: Stock / Product Photo -->
+        <div style="background: #fff; border: 1px solid #EAECF0; border-radius: 20px; padding: 24px;">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 18px;">
+            <div>
+              <b style="color: #101828; font-size: 15px; font-weight: 700; display: block; margin-bottom: 6px;">Stock / Product Photo</b>
+              <span style="color: #667085; font-size: 13px; display: block; margin-bottom: 12px;">Recommended: A4 Middle Fit (1240 × 760 px)</span>
+              <span style="background: #F2F4F7; color: #344054; font-size: 12px; padding: 6px 12px; border-radius: 99px; font-weight: 600;">
+                {{ productPhoto ? 'Image uploaded' : 'No image uploaded' }}
+              </span>
+            </div>
+            <label class="upload-image" style="display:inline-flex; padding:0 18px; width:auto; font-size:14px; height:40px; border-radius:12px; background: #09089C; color: #fff; font-weight: 600; align-items: center; gap: 8px; cursor: pointer;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+              Upload
+              <input type="file" (change)="onUploadProductPhoto($event)" accept="image/*" style="display:none;">
+            </label>
+          </div>
+          <div style="width: 100%; height: 140px; border: 1.5px dashed #D0D5DD; border-radius: 16px; display: grid; place-items: center; overflow: hidden; background: #FCFCFD;">
+            <img *ngIf="productPhoto" [src]="productPhoto" style="width: 100%; height: 100%; object-fit: cover;">
+            <span *ngIf="!productPhoto" style="color: #98A2B3; font-size: 14px; font-weight: 500;">No image</span>
+          </div>
+        </div>
+
+        <!-- Card 3: Footer Background Image -->
+        <div style="background: #fff; border: 1px solid #EAECF0; border-radius: 20px; padding: 24px;">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 18px;">
+            <div>
+              <b style="color: #101828; font-size: 15px; font-weight: 700; display: block; margin-bottom: 6px;">Footer Background Image</b>
+              <span style="color: #667085; font-size: 13px; display: block; margin-bottom: 12px;">Recommended: A4 Bottom Strip (1240 × 250 px)</span>
+              <span style="background: #F2F4F7; color: #344054; font-size: 12px; padding: 6px 12px; border-radius: 99px; font-weight: 600;">
+                {{ footerBanner ? 'Image uploaded' : 'No image uploaded' }}
+              </span>
+            </div>
+            <label class="upload-image" style="display:inline-flex; padding:0 18px; width:auto; font-size:14px; height:40px; border-radius:12px; background: #09089C; color: #fff; font-weight: 600; align-items: center; gap: 8px; cursor: pointer;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+              Upload
+              <input type="file" (change)="onUploadFooterBanner($event)" accept="image/*" style="display:none;">
+            </label>
+          </div>
+          <div style="width: 100%; height: 140px; border: 1.5px dashed #D0D5DD; border-radius: 16px; display: grid; place-items: center; overflow: hidden; background: #FCFCFD;">
+            <img *ngIf="footerBanner" [src]="footerBanner" style="width: 100%; height: 100%; object-fit: cover;">
+            <span *ngIf="!footerBanner" style="color: #98A2B3; font-size: 14px; font-weight: 500;">No image</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Footer Section -->
+    <div style="padding: 20px 28px; border-top: 1px solid #EAECF0; display: flex; justify-content: flex-end; gap: 14px; background: #fff;">
+      <button style="height: 44px; padding: 0 20px; border-radius: 12px; border: none; background: transparent; font-weight: 600; font-size: 15px; color: #344054; cursor: pointer;" (click)="onClose()">
+        Cancel
+      </button>
+      <button class="primary-small" style="height: 44px; padding: 0 20px; border-radius: 12px; background: #09089C; color: #fff; font-weight: 600; font-size: 15px; border: none; display: flex; align-items: center; gap: 10px; cursor: pointer;" (click)="saveDesign()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+        Save Design
+      </button>
+    </div>
+
+  </div>
+</div>
